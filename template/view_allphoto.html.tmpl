@@ -1,0 +1,56 @@
+[%# index.html.tmpl  - template for index
+  #%]
+[% PROCESS header.html.tmpl
+  title = "Photo Directory"
+%]
+
+<h2>Welcome [% uid %]</h2>
+
+<h3>List of users</h3>
+
+<p>Below each photo, lines are
+<ol>
+  <li>Name (UID)</li>
+  <li>e-mail</li>
+  <li>Organization / Country - Location</li>
+</ol></p>
+
+[% unames = ulist.keys.sort %]
+[% usize = unames.size %]
+[% cph = 0 %]
+[% cid = 0 %]
+[% mcol = 4 %]
+[% ccol = 0 %]
+
+<table border="1">
+<tbody>
+[% WHILE cph < usize %]
+  <tr>
+    [% ccol = 0 %]
+    [% WHILE (cph < usize) AND (ccol < mcol) %]
+      <td><img src="view_photo.cgi?uid=[% ulist.${unames.${cph}}.uid %]" width="250"></td>
+      [% cph = cph + 1 %]
+      [% ccol = ccol + 1 %]
+    [% END %]
+  </tr>
+  <tr>
+    [% ccol = 0 %]
+    [% WHILE (cid < usize) AND (ccol < mcol) %]
+      <td>
+        [% ulist.${unames.${cid}}.sn %] 
+        ([% ulist.${unames.${cid}}.uid %])<br>
+        [% ulist.${unames.${cid}}.mail %]<br>
+        [% ulist.${unames.${cid}}.o %] / 
+        [% ulist.${unames.${cid}}.c %] - 
+        [% ulist.${unames.${cid}}.l %]<br>
+      </td>
+      [% cid = cid + 1 %]
+      [% ccol = ccol + 1 %]
+    [% END %]
+  </tr>
+[% END %]
+</tbody>
+</table>
+
+[% PROCESS footer.html.tmpl %]
+

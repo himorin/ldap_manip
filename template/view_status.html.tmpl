@@ -1,0 +1,45 @@
+[%# index.html.tmpl  - template for index
+  #%]
+[% PROCESS header.html.tmpl
+  title = "LDAP MANIP"
+%]
+
+<h2>Welcome [% uid %]</h2>
+
+<h3>Your LDAP entries - (DN = [% dn %])</h3>
+<ul>
+  <li>uid: [% uid %]</li>
+  <li>DN: [% dn %]</li>
+  <li>cn: [% entry.cn.join(", ") %]</li>
+  <li>Name (sn): [% entry.sn.join(", ") %]</li>
+  <li>mail: [% entry.mail.join(", ") %]</li>
+  <li>Organization: [% entry.o.join(", ") %]</li>
+  <li>Place: country = [% entry.c.join(", ") %], location = [% entry.l.join(", ") %]</li>
+  <li>Shell information
+    <ul>
+      <li>ID: user [% entry.uidNumber.join(", ") %]
+            / group (primary) [% entry.gidNumber.join(", ") %]</li>
+      <li>home: [% entry.homeDirectory.join(", ") %]</li>
+      <li>maildrop: [% entry.maildrop.join(", ") %]</li>
+    </ul></li>
+  <li>Internal information
+    <ul>
+      <li>objectClass: [% entry.objectClass.join(", ") %]</li>
+      <li>Created: by [% entry.creatorsName.join(" ") %]
+                   at [% entry.createTimestamp.join(" ") %]</li>
+      <li>Last modified: by [% entry.modifiersName.join(" ") %]
+                         at [% entry.modifyTimestamp.join(" ") %]</li>
+      <li>Groups: [% groups.join(",") %]</li>
+    </ul></li>
+</ul>
+
+<h3>Your photo</h3>
+
+[% IF photo_exist == 0 %]
+<img src="view_photo.cgi?uid=[% uid %]">
+[% ELSE %]
+<p>Not uploaded</p>
+[% END %]
+
+[% PROCESS footer.html.tmpl %]
+

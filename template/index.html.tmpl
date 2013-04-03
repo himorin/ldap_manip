@@ -1,0 +1,21 @@
+[%# index.html.tmpl  - template for index
+  #%]
+[% PROCESS header.html.tmpl
+  title = "LDAP MANIP"
+%]
+
+<h2>Welcome [% env.REMOTE_USER %]</h2>
+
+<ul>
+  <li><a href="view_status.cgi">View your status</a></li>
+  <li>Modify your entry
+    <ul>
+      <li><a href="change_password.cgi">Change password</a></li>
+      <li><a href="edit_attr.cgi">Edit your information</a></li>
+    </ul></li>
+  <li><a href="view_all.cgi">View all accounts on this system</a></li>
+  <li><a href="view_allphoto.cgi">Photo directory</a></li>
+</ul>
+
+[% PROCESS footer.html.tmpl %]
+

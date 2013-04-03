@@ -1,0 +1,48 @@
+[%# index.html.tmpl  - template for index
+  #%]
+[% PROCESS header.html.tmpl
+  title = "List of avail users"
+%]
+
+<h2>Welcome [% uid %]</h2>
+
+<h3>List of users</h3>
+
+<table border="1">
+<thead>
+  <tr><td>UID</td><td>Name</td><td>mail</td>
+    <td>Photo</td>
+    <td>Organization</td><td>Location</td>
+    <td>Created at</td><td>Last modified at</td>
+    <td>Last modified by</td></tr>
+</thead>
+<tbody>
+[% FOREACH user IN ulist.keys.sort %]
+  <tr>
+    <td>[% ulist.${user}.uid %]</td>
+    <td>[% ulist.${user}.sn.join(", ") %]</td>
+    <td>[% ulist.${user}.mail.join(", ") %]</td>
+    <td>[% IF ulist.${user}.photo_exist == 0 %]<a href="view_photo.cgi?uid=[% ulist.${user}.uid %]">view</a>[% END %]</td>
+    <td>[% ulist.${user}.o.join(", ") %]</td>
+    <td>[% ulist.${user}.c.join(", ") %] - [% ulist.${user}.l.join(", ") %]</td>
+    <td>[% ulist.${user}.createTimestamp.join(", ") %]</td>
+    <td>[% ulist.${user}.modifyTimestamp.join(", ") %]</td>
+    <td>[% ulist.${user}.modifiersName.join(", ") %]</td>
+  </tr>
+[% END %]
+</tbody>
+</table>
+
+<h3>List of groups and members</h3>
+
+<ul>
+[% FOREACH group IN glist.keys.sort %]
+  <li>[% group %]
+    <ul>
+      [% FOREACH name IN glist.${group}.memberUid %]<li>[% name %]</li>[% END %]
+    </ul></li>
+[% END %]
+</ul>
+
+[% PROCESS footer.html.tmpl %]
+

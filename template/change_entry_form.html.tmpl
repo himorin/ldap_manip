@@ -1,0 +1,60 @@
+[%# *.html.tmpl  - template for index
+  #%]
+[% PROCESS header.html.tmpl
+  title = "Change your information"
+%]
+
+<h2>Welcome [% env.REMOTE_USER %], fill below if you want to change your information</h2>
+<p>Your LDAP entries - (DN = [% dn %])</p>
+<form action="edit_attr.cgi" method="post" enctype="multipart/form-data">
+<ul>
+  <li>uid: [% uid %]</li>
+  <li>DN: [% dn %]</li>
+  <li>cn: [% entry.cn.join(", ") %]</li>
+  <li>Name (sn): <input type="text" name="new_sn" value="[% entry.sn.join(", ") %]" size="50" /></li>
+  <li>mail: [% entry.mail.join(", ") %]</li>
+  <li>Organization: <input type="text" name="new_o" value="[% entry.o.join(", ") %]" size="50" /> (Your institution name)</li>
+  <li>Place: 
+    country = 
+      <select name="new_c" disabled="disabled">
+        [% FOREACH cname = [ 'ja', 'tw', 'us', 'br', 'fr', '' ] %]
+          <option value="[% cname %]"
+            [%- IF entry.c.first == cname %]selected="selected"[% END %]>
+          [%- cname %]</option>
+        [% END %]
+      </select>
+    location = <input type="text" new="new_l" value="[% entry.l.join(", ") %]" size="50" disabled="disabled" /></li>
+  <li>Shell information
+    <ul>
+      <li>ID: user [% entry.uidNumber.join(", ") %]
+            / group (primary) [% entry.gidNumber.join(", ") %]</li>
+      <li>home: [% entry.homeDirectory.join(", ") %]</li>
+      <li>maildrop: [% entry.maildrop.join(", ") %]</li>
+    </ul></li>
+  <li>Internal information
+    <ul>
+      <li>objectClass: [% entry.objectClass.join(", ") %]</li>
+      <li>Created: by [% entry.creatorsName.join(" ") %]
+                   at [% entry.createTimestamp.join(" ") %]</li>
+      <li>Last modified: by [% entry.modifiersName.join(" ") %]
+                         at [% entry.modifyTimestamp.join(" ") %]</li>
+      <li>Groups: [% groups.join(",") %]</li>
+    </ul></li>
+  <li>Upload new photo (Use photo with size of width:250-300 height:250-350 pixel)
+    <input type="file" name="new_photo" size="80" /></li>
+</ul>
+
+<p>
+  <input type="hidden" name="old_sn" value="[% entry.sn.join(", ") %]" />
+  <input type="hidden" name="old_o" value="[% entry.o.join(", ") %]" />
+  <input type="hidden" name="old_c" value="[% entry.c.join(", ") %]" />
+  <input type="hidden" name="old_l" value="[% entry.l.join(", ") %]" />
+  To change, type your password: <input type="password" name="upass" />
+  <br />
+  <input name="change" value="CHANGE!" type="submit" />
+  <input type="reset" />
+</p>
+</form>
+
+
+[% PROCESS footer.html.tmpl %]
