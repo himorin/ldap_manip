@@ -39,8 +39,11 @@ my %glist;
 foreach my $gcnt ($obj_ldap->GetAllGID('cn', 'memberUid')) {
     my %acnt = ();
     my @amem = ();
+    my %hmem = ();
     $acnt{'cn'} = $gcnt->get_value('cn');
     @amem = $gcnt->get_value('memberUid');
+    foreach (@amem) {$hmem{$_} = $_; }
+    $acnt{'members'} = \%hmem;
     $acnt{'memberUid'} = \@amem;
     $glist{$acnt{'cn'}} = \%acnt;
 }

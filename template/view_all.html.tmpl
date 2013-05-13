@@ -35,14 +35,27 @@
 
 <h3>List of groups and members</h3>
 
-<ul>
-[% FOREACH group IN glist.keys.sort %]
-  <li>[% group %]
-    <ul>
-      [% FOREACH name IN glist.${group}.memberUid %]<li>[% name %]</li>[% END %]
-    </ul></li>
-[% END %]
-</ul>
+<table border="1">
+<thead>
+  <tr><th>UID</th>
+    [% FOREACH gid IN glist.keys.sort %]
+      <th>[% gid %]</th>
+    [%- END %]
+      <th>email</th>
+    </tr>
+</thead>
+<tbody>
+  [% FOREACH user IN ulist.keys.sort %]
+    <tr><td>[% user %]</td>
+      [% FOREACH gid IN glist.keys.sort %]
+        [% IF glist.${gid}.members.${user}.defined %]<td>x</td>
+        [% ELSE %]<td></td>[% END %]
+      [%- END %]
+      <td>[% ulist.${user}.mail.join(", ") %]</td>
+    </tr>
+  [% END %]
+</tbody>
+</table>
 
 [% PROCESS footer.html.tmpl %]
 
