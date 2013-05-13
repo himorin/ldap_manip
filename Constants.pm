@@ -31,6 +31,7 @@ use base qw(Exporter);
     ERROR_LDAP
 
     PASS_DEGREE
+    MAX_PHOTO_BYTE
 );
 
 # General
@@ -51,6 +52,8 @@ use constant ERROR_AUTH_PASS   => 1;
 use constant ERROR_LDAP        => 2;
 
 use constant PASS_DEGREE  => 7;
+
+use constant MAX_PHOTO_BYTE => 51200;
 
 sub LOCATIONS {
     # absolute path for installation ("installation")

@@ -59,6 +59,13 @@ if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
     my $pfh = $obj_cgi->upload('new_photo');
     my ($buf, $pdat);
     while (read($pfh, $buf, 1024)) {$pdat .= $buf; }
+    if ((substr($pdat, 0, 2) ne "\xFF\xD8") ||
+        (substr($pdat, 6, 4) ne "JFIF")) {
+      $obj_tmpl->throw_error_user('image_not_jpeg');
+    }
+    if (length($pdat) > MAX_PHOTO_BYTE) {
+      $obj_tmpl->throw_error_user('image_byte_too_large');
+    }
     $lrep{'jpegPhoto'} = [ $pdat ];
   }
 
