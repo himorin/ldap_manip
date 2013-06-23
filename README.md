@@ -11,6 +11,7 @@ Requirements
 * Template
 * File::Basename
 * MIME::Base64
+* Digest::SHA
 
 Configuration
 =============

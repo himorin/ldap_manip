@@ -10,7 +10,7 @@ use strict;
 use base qw(Exporter);
 
 use MIME::Base64;
-use Digest::SHA1 qw(sha1 sha1_base64);
+use Digest::SHA qw(sha1 sha1_base64);
 
 %ParseExop::EXPORT = qw(
     ParseSSHA
