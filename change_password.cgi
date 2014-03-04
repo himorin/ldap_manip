@@ -3,6 +3,7 @@
 use strict;
 use NetLdap;
 use Constants;
+use LMConfig;
 use Utils;
 use ParseExop;
 use Tmpl;
@@ -41,6 +42,8 @@ if ($ENV{'REQUEST_METHOD'} eq 'POST') {
       $err = 'pass_change_old_invalid';
     } elsif ($err == Constants->ERROR_LDAP) {
       $err = 'pass_change_ldap_err';
+    } elsif ($err == Constants->ERROR_PASS_HISTORY) {
+      $err = 'pass_change_pass_history';
     } elsif ($err == Constants->ERROR_SUCCESS) {
       $err = '';
     } else {

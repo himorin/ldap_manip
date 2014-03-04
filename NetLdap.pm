@@ -11,6 +11,7 @@ use strict;
 use Net::LDAP;
 
 use Constants;
+use LMConfig;
 use ParseExop;
 
 use base qw(Exporter);
@@ -180,6 +181,23 @@ sub GetAttrsFromUID {
 
 sub ChangePassword {
     my ($self, $dn, $oldpass, $newpass) = @_;
+    # check
+    if (HASH_HISTORY ne '') {
+        my $hist = Constants::LOCATIONS()->{'data'} . '/' . HASH_HISTORY;
+        open(HDAT, $hist);
+        foreach (<HDAT>) {
+            chomp;
+            my $chash = ParseExop::ParseSSHA($_);
+            my $nhash = ParseExop::ExecSSHA($newpass, $chash->{'salt'});
+            $nhash = ParseExop::ExecHash('ssha', $nhash);
+            if ($nhash eq $chash) {
+                return ERROR_PASS_HISTORY;
+            }
+        }
+        close(HDAT);
+    }
+
+    # exec change
     my $ldap = Net::LDAP->new(LDAP_URI);
     my $msg;
     $msg = $ldap->bind($dn, password => $oldpass);
@@ -193,6 +211,14 @@ sub ChangePassword {
     $msg = $ldap->modify($dn, replace => {'userPassword' => $hash} );
     if ($msg->code) {
         return ERROR_LDAP;
+    }
+
+    # write
+    if (HASH_HISTORY ne '') {
+        my $hist = Constants::LOCATIONS()->{'data'} . '/' . HASH_HISTORY;
+        open(OHIST, ">> $hist");
+        print OHIST "$hash\n";
+        close(OHIST);
     }
     return ERROR_SUCCESS;
 }

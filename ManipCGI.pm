@@ -13,6 +13,7 @@ use CGI qw(
 use base qw(CGI);
 
 use Constants;
+use LMConfig;
 
 $| = 1; # disabling output buffering
 

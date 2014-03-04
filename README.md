@@ -16,10 +16,21 @@ Requirements
 Configuration
 =============
 
-Edit Constants.pm with two definitions.
+Edit LMConfig.pm with definitions.
 
 * LDAP_URI     : Target LDAP URI like ldap://localhost/
 * LDAP_BASEDN  : Target BASEDN
+* URL_BASE     : Assumed to be used for template, not used as for now
+* PASS_DEGREE  : Threshold for password strength
+* MAX_PHOTO_BYTE : Max photo size in byte
+* HASH_HISTORY : If not empty, save and match password hash on change
+
+HASH_HISTORY
+============
+
+If not empty, use file $path_data/HASH_HISTORY for password hash history. 
+Use complex string for this file. ($pash_data should be readable from http 
+daemon, so no restriction...)
 
 Test Scripts
 ============

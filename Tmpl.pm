@@ -11,6 +11,7 @@ use base qw(Exporter);
 use Template;
 
 use Constants;
+use LMConfig;
 use Utils;
 
 %Template::EXPORT = qw(

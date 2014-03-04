@@ -11,31 +11,26 @@ use strict;
 use File::Basename;
 use Cwd;
 
+use LMConfig;
+
 use base qw(Exporter);
 
 @Constants::EXPORT = qw(
-    URL_BASE
     LIB_VERSION
     LIB_NAME
 
     TRUE
     FALSE
 
-    LDAP_URI
-    LDAP_BASEDN
-
     LOCATIONS
 
     ERROR_SUCCESS
     ERROR_AUTH_PASS
     ERROR_LDAP
-
-    PASS_DEGREE
-    MAX_PHOTO_BYTE
+    ERROR_PASS_HISTORY
 );
 
 # General
-use constant URL_BASE     => '';
 use constant LIB_VERSION  => '0.1';
 use constant LIB_NAME     => 'LDAP Web-based User Manager';
 
@@ -43,17 +38,12 @@ use constant TRUE         => 1;
 use constant FALSE        => 0;
 
 # LDAP
-use constant LDAP_URI     => '';
-use constant LDAP_BASEDN  => '';
 
 # ERROR
 use constant ERROR_SUCCESS     => 0;
 use constant ERROR_AUTH_PASS   => 1;
 use constant ERROR_LDAP        => 2;
-
-use constant PASS_DEGREE  => 7;
-
-use constant MAX_PHOTO_BYTE => 51200;
+use constant ERROR_PASS_HISTORY => 3;
 
 sub LOCATIONS {
     # absolute path for installation ("installation")

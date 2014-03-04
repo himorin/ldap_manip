@@ -3,6 +3,7 @@
 use strict;
 use NetLdap;
 use Constants;
+use LMConfig;
 use Utils;
 use ParseExop;
 use Tmpl;

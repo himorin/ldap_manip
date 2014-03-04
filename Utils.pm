@@ -14,6 +14,7 @@ use base qw(Exporter);
 use MIME::Base64;
 use Encode;
 use Constants;
+use LMConfig;
 
 %Utils::EXPORT = qw(
     print_base64
