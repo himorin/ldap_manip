@@ -182,13 +182,15 @@ sub GetAttrsFromUID {
 sub ChangePassword {
     my ($self, $dn, $oldpass, $newpass) = @_;
     # check
+    my ($chash, $nhash);
     if (HASH_HISTORY ne '') {
         my $hist = Constants::LOCATIONS()->{'data'} . '/' . HASH_HISTORY;
         open(HDAT, $hist);
         foreach (<HDAT>) {
             chomp;
-            my $chash = ParseExop::ParseSSHA($_);
-            my $nhash = ParseExop::ExecSSHA($newpass, $chash->{'salt'});
+            $chash = ParseExop::ParseHashed($_);
+            $chash = ParseExop::ParseSSHA($chash->{'data'});
+            $nhash = ParseExop::ExecSSHA($newpass, $chash->{'salt'});
             $nhash = ParseExop::ExecHash('ssha', $nhash);
             if ($nhash eq $_) {
                 return ERROR_PASS_HISTORY;
