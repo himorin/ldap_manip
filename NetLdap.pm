@@ -188,8 +188,8 @@ sub ChangePassword {
         open(HDAT, $hist);
         foreach (<HDAT>) {
             chomp;
-            $chash = ParseExop::ParseHashed($_);
-            $chash = ParseExop::ParseSSHA($chash->{'data'});
+            # assume {SSHA}
+            $chash = ParseExop::ParseSSHA(substr($_, 6));
             $nhash = ParseExop::ExecSSHA($newpass, $chash->{'salt'});
             $nhash = ParseExop::ExecHash('ssha', $nhash);
             if ($nhash eq $_) {
