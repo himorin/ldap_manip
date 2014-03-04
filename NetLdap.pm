@@ -190,7 +190,7 @@ sub ChangePassword {
             my $chash = ParseExop::ParseSSHA($_);
             my $nhash = ParseExop::ExecSSHA($newpass, $chash->{'salt'});
             $nhash = ParseExop::ExecHash('ssha', $nhash);
-            if ($nhash eq $chash) {
+            if ($nhash eq $_) {
                 return ERROR_PASS_HISTORY;
             }
         }
