@@ -56,9 +56,9 @@ if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
   if ($obj_cgi->param('new_l') ne $obj_cgi->param('old_l')) {
     $lrep{'l'} = [ $obj_cgi->param('new_l') ];
   }
-  if (defined($obj_cgi->param('new_photo'))) {
+  if (defined($obj_cgi->param('new_photo')) &&
+      defined($obj_cgi->upload('new_photo'))) {
     my $pfh = $obj_cgi->upload('new_photo');
-    if (! defined($pfh)) {$obj_tmpl->throw_error_user('image_not_jpeg'); }
     my ($buf, $pdat);
     while (read($pfh, $buf, 1024)) {$pdat .= $buf; }
     if ((substr($pdat, 0, 2) ne "\xFF\xD8") ||
