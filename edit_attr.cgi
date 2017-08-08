@@ -97,10 +97,20 @@ if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
     print $obj_cgi->header();
     $obj_tmpl->throw_error_user('pass_change_old_invalid');
   }
-  $err = $ldap->modify($bdn, changes => [ replace => \%lrep, add => \%ladd ]);
+  if (keys(%lrep) > -1) {
+    if (keys(%ladd) > -1) {
+      $err = $ldap->modify($bdn, changes => [ replace => \%lrep, add => \%ladd ]);
+    } else {
+      $err = $ldap->modify($bdn, replace => \%lrep);
+    }
+  } elsif (keys(%ladd) > -1) {
+    $err = $ldap->modify($bdn, add => \%ladd);
+  } else {
+    $obj_tmpl->throw_error_user('nothing_changed');
+  }
   if ($err->code) {
     print $obj_cgi->header();
-    $obj_tmpl->throw_error_user($err->code);
+    $obj_tmpl->throw_error_user('ldap_' + $err->code);
   }
   print $obj_cgi->redirect('view_status.cgi');
   exit;
