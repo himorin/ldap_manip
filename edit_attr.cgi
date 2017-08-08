@@ -43,18 +43,34 @@ $obj_tmpl->set_vars("groups", $obj_ldap->SearchMemberGroups($uid));
 my $err;
 # change attribute
 if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
-  my %lrep;
+  my (%lrep, %ladd);
   if ($obj_cgi->param('new_sn') ne $obj_cgi->param('old_sn')) {
-    $lrep{'sn'} = [ $obj_cgi->param('new_sn') ];
+    if (defined($user_attr->{'sn'})) {
+      $lrep{'sn'} = [ $obj_cgi->param('new_sn') ];
+    } else {
+      $ladd{'sn'} = [ $obj_cgi->param('new_sn') ];
+    }
   }
   if ($obj_cgi->param('new_c') ne $obj_cgi->param('old_c')) {
-    $lrep{'c'} = [ $obj_cgi->param('new_c') ];
+    if (defined($user_attr->{'c'})) {
+      $lrep{'c'} = [ $obj_cgi->param('new_c') ];
+    } else {
+      $ladd{'c'} = [ $obj_cgi->param('new_c') ];
+    }
   }
   if ($obj_cgi->param('new_o') ne $obj_cgi->param('old_o')) {
-    $lrep{'o'} = [ $obj_cgi->param('new_o') ];
+    if (defined($user_attr->{'o'})) {
+      $lrep{'o'} = [ $obj_cgi->param('new_o') ];
+    } else {
+      $ladd{'o'} = [ $obj_cgi->param('new_o') ];
+    }
   }
   if ($obj_cgi->param('new_l') ne $obj_cgi->param('old_l')) {
-    $lrep{'l'} = [ $obj_cgi->param('new_l') ];
+    if (defined($user_attr->{'l'})) {
+      $lrep{'l'} = [ $obj_cgi->param('new_l') ];
+    } else {
+      $ladd{'l'} = [ $obj_cgi->param('new_l') ];
+    }
   }
   if (defined($obj_cgi->param('new_photo')) &&
       defined($obj_cgi->upload('new_photo'))) {
@@ -68,7 +84,11 @@ if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
     if (length($pdat) > MAX_PHOTO_BYTE) {
       $obj_tmpl->throw_error_user('image_byte_too_large');
     }
-    $lrep{'jpegPhoto'} = [ $pdat ];
+    if (defined($user_attr->{'jpegPhoto'})) {
+      $lrep{'jpegPhoto'} = [ $pdat ];
+    } else {
+      $ladd{'jpegPhoto'} = [ $pdat ];
+    }
   }
 
   my $ldap = Net::LDAP->new(LDAP_URI);
@@ -77,7 +97,7 @@ if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
     print $obj_cgi->header();
     $obj_tmpl->throw_error_user('pass_change_old_invalid');
   }
-  $err = $ldap->modify($bdn, replace => \%lrep);
+  $err = $ldap->modify($bdn, changes => [ replace => \%lrep, add => \%ladd ]);
   if ($err->code) {
     print $obj_cgi->header();
     $obj_tmpl->throw_error_user($err->code);
