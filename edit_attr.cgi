@@ -24,12 +24,10 @@ $obj_tmpl->set_vars('env', \%ENV);
 
 my $obj_ldap = new NetLdap;
 if (! $obj_ldap->bind) {
-    print $obj_cgi->header();
     $obj_tmpl->throw_error_code('ldap_bind_anonymous');
 }
 my $bdn = $obj_ldap->GetDNFromUID($uid);
 if (! defined($bdn)) {
-    print $obj_cgi->header();
     $obj_tmpl->throw_error_code('ldap_get_dn');
 }
 
@@ -94,7 +92,6 @@ if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
   my $ldap = Net::LDAP->new(LDAP_URI);
   $err = $ldap->bind($bdn, password => $obj_cgi->param('upass'));
   if ($err->code) {
-    print $obj_cgi->header();
     $obj_tmpl->throw_error_user('pass_change_old_invalid');
   }
   if (keys(%lrep) > 0) {
@@ -109,8 +106,7 @@ if (($ENV{'REQUEST_METHOD'} eq 'POST') && defined($obj_cgi->param('upass'))) {
     $obj_tmpl->throw_error_user('nothing_changed');
   }
   if ($err->code) {
-    print $obj_cgi->header();
-    $obj_tmpl->throw_error_user('ldap_' + $err->code);
+    $obj_tmpl->throw_error_user('ldap_' . $err->code);
   }
   print $obj_cgi->redirect('view_status.cgi');
   exit;
