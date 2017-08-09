@@ -14,7 +14,7 @@ my $uid = $ENV{'REMOTE_USER'};
 
 my @disp_attr = ('cn', 'uidNumber', 'gidNumber', 'homeDirectory', 'mail',
   'modifyTimestamp', 'modifiersName', 'objectClass', 'maildrop', 'sn',
-  'o', 'c', 'l', 'photo',
+  'o', 'c', 'l', 'jpegPhoto',
   'bugmail', 'creatorsName', 'createTimestamp');
 
 my $obj_tmpl = new Tmpl;
