@@ -160,7 +160,7 @@ sub SearchMemberGroups {
 sub SearchMemberGroupsGN {
     my ($self, $dn) = @_;
     if (! $ldap_bind) {return undef; }
-    if (! defined($uid)) {return undef; }
+    if (! defined($dn)) {return undef; }
     my @groups;
     my %ldap_attr;
     $ldap_attr{base} = LDAP_BASEDN;
