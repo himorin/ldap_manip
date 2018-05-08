@@ -37,6 +37,7 @@ $obj_tmpl->set_vars("dn", $user_dn);
 $obj_tmpl->set_vars("uid", $ENV{'REMOTE_USER'});
 $obj_tmpl->set_vars("entry", $user_attr);
 $obj_tmpl->set_vars("groups", $obj_ldap->SearchMemberGroups($user_name));
+$obj_tmpl->set_vars("groupmember", $obj_ldap->SearchMemberGroupsGN($user_dn));
 $obj_tmpl->set_vars("photo_exist", defined($user_attr->{'jpegPhoto'}) ? 0 : 1);
 
 print $obj_cgi->header();

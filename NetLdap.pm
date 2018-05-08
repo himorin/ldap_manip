@@ -22,7 +22,9 @@ use base qw(Exporter);
     SearchUID
     GetAllUID
     SearchMemberGroups
+    SearchMemberGroupsGN
     GetAllGID
+    GetAllGN
     GetDNFromUID
     GetAttrsFromUID
 
@@ -108,6 +110,21 @@ sub GetAllGID {
     return $ldap_res->entries;
 }
 
+sub GetAllGN {
+    my ($self, @attrs) = @_;
+    if (! $ldap_bind) {return undef; }
+    my %ldap_attr;
+    $ldap_attr{base} = LDAP_BASEDN;
+    $ldap_attr{filter} = "(objectClass=groupOfNames)";
+    $ldap_attr{scope} = "sub";
+    if ($#attrs > -1) {
+        push(@attrs);
+        $ldap_attr{attrs} = \@attrs;
+    }
+    my $ldap_res = $obj_ldap->search(%ldap_attr);
+    return $ldap_res->entries;
+}
+
 sub GetAllUIDPhoto {
     my ($self, @attrs) = @_;
     if (! $ldap_bind) {return undef; }
@@ -131,6 +148,23 @@ sub SearchMemberGroups {
     my %ldap_attr;
     $ldap_attr{base} = LDAP_BASEDN;
     $ldap_attr{filter} = "(memberUid=$uid)";
+    $ldap_attr{scope} = "sub";
+    my $ldap_res = $obj_ldap->search(%ldap_attr);
+    if ($ldap_res->code != 0) {return undef; }
+    foreach ($ldap_res->entries) {
+        push(@groups, $_->get_value('cn'));
+    }
+    return \@groups;
+}
+
+sub SearchMemberGroupsGN {
+    my ($self, $dn) = @_;
+    if (! $ldap_bind) {return undef; }
+    if (! defined($uid)) {return undef; }
+    my @groups;
+    my %ldap_attr;
+    $ldap_attr{base} = LDAP_BASEDN;
+    $ldap_attr{filter} = "(member=$dn)";
     $ldap_attr{scope} = "sub";
     my $ldap_res = $obj_ldap->search(%ldap_attr);
     if ($ldap_res->code != 0) {return undef; }
